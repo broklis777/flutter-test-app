@@ -15,6 +15,8 @@ void main(){
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,6 +28,8 @@ class MyApp extends StatelessWidget {
 }
 
 class NavigationController extends StatefulWidget {
+  const NavigationController({super.key});
+
   @override
   _NavigationControllerState createState() => _NavigationControllerState();
 }

@@ -1,24 +1,89 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
+import '../models/note.dart';
 
 class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context){
-    final username = context.watch<AppProvider>().username;
+  final TextEditingController _controller = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+  @override
+  Widget build(BuildContext context) {
+    final notes = context.watch<AppProvider>().notes;
+
+    return Scaffold(
+      appBar: AppBar(title: Text('My Notes')),
+      body: Column(
         children: [
-          Text('Hello, $username!', style: TextStyle(fontSize: 24)),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              context.read<AppProvider>().updateUsername("Broklis");
-            },
-            child: Text("Change me"),
-          )
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: titleController,
+                    decoration: InputDecoration(
+                      hintText: 'Title...',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      hintText: 'Enter note...',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_controller.text.trim().isNotEmpty &&
+                        titleController.text.trim().isNotEmpty) {
+                      context.read<AppProvider>().addNote(
+                        titleController.text.trim(),
+                        _controller.text.trim(),
+                      );
+                      _controller.clear();
+                      titleController.clear();
+                    }
+                  },
+                  child: Icon(Icons.add),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: notes.isEmpty
+                ? Center(child: Text("No notes yet"))
+                : GridView.builder(
+                    padding: const EdgeInsets.all(12),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                      childAspectRatio: 1,
+                    ),
+                    itemCount: notes.length,
+                    itemBuilder: (context, index) {
+                      final note = notes[index];
+                      return GestureDetector(
+                        onLongPress: () {
+                          context.read<AppProvider>().deleteNote(note.id);
+                        },
+                        child: Card(
+                          color: Colors.amber[100],
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text(note.content),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
         ],
       ),
     );
