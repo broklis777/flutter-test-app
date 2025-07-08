@@ -28,6 +28,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                SizedBox(width: 8),
                 Expanded(
                   child: TextField(
                     controller: _controller,
@@ -71,13 +72,48 @@ class HomeScreen extends StatelessWidget {
                       final note = notes[index];
                       return GestureDetector(
                         onLongPress: () {
-                          context.read<AppProvider>().deleteNote(note.id);
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SafeArea(
+                                child: Wrap(
+                                  children: [
+                                    ListTile(
+                                      leading: Icon(Icons.delete, color: Colors.red),
+                                      title: Text('Delete'),
+                                      onTap: () {
+                                        context.read<AppProvider>().deleteNote(note.id);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
                         },
                         child: Card(
                           color: Colors.amber[100],
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
-                            child: Text(note.content),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  note.name,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Expanded(
+                                  child: SingleChildScrollView(
+                                    child: Text(note.content),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
