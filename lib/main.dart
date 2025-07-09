@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/app_provider.dart';
 import 'screens/home_screen.dart';
-import 'screens/settings_screen.dart';
-import 'screens/stats_screen.dart';
+import 'screens/calculator_screen.dart';
+import 'screens/coin_flip_screen.dart';
 
 void main(){
   runApp(
@@ -39,8 +39,8 @@ class _NavigationControllerState extends State<NavigationController> {
 
   final _screens = [
     HomeScreen(),
-    StatsScreen(),
-    SettingsScreen(),
+    CoinFlipView(),
+    CalculatorScreen(),
   ];
 
   @override
@@ -53,7 +53,7 @@ class _NavigationControllerState extends State<NavigationController> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Stats'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings')
+          BottomNavigationBarItem(icon: Icon(Icons.calculate), label: 'Calculator')
         ],
       ),
     );

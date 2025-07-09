@@ -45,7 +45,7 @@ class AppProvider extends ChangeNotifier {
   }
 
   void deleteNote(String id) {
-    _notes.remove((note) => note.id == id);
+    _notes.removeWhere((note) => note.id == id);
     _saveNotes();
     notifyListeners();
   }
